@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  kafka:
+    image: confluentinc/cp-kafka:7.7.8
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    #   - "29092:29092"
+    environment:
+      KAFKA_node_ID: 1
+      kafka_kraft_mode: "true"
+      cluster_id: "sdlaksjafads_dasas-asdasd"
+      kafka_process_roles: "broker,controller"
+      kafka_controller_quorum_voters: "1@kafka:9093"
+      kafka_offsets_topic_replication_factor: 1 #metadata topic replication factor, here no backup
+      kafak_listeners: PLAINTEXT://kafka:9092,CONTROLLER://kafka:9093
+      kafka_advertised_listeners: PLAINTEXT://localhost:9092
+      kafka_connection_listener_name: controller
+      kafak_log_dirs: /tmp/kraft-combined-logs
+    volumes:
+      - kafka_kraft:/var/lib/kafka/data  
+
+volumes:
+  kafka_kraft
+
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: python_app
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - PYTHONUNBUFFERED=1
+  #     # - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+  #   volumes:
+  #     - .:/app
+  #   working_dir: /app
+  #   command: python main.py
+
+  # Optional: Add a database service
+  # db:
+  #   image: postgres:15
+  #   container_name: postgres_db
+  #   environment:
+  #     POSTGRES_USER: user
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: myapp
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+
+# volumes:
+#   postgres_data:
